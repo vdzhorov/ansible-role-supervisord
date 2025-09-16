@@ -1,0 +1,23 @@
+---
+
+- name: restart supervisor service
+  ansible.builtin.service:
+    name: "{{ _supervisor_service }}"
+    state: restarted
+
+- name: supervisorctl reread
+  ansible.builtin.command: supervisorctl reread
+  register: _supervisor_reread
+  changed_when: "'updated' in _supervisor_reread.stdout or 'available' in _supervisor_reread.stdout"
+  failed_when: _supervisor_reread.rc != 0
+
+- name: supervisorctl update
+  ansible.builtin.command: supervisorctl update
+  register: _supervisor_update
+  changed_when: "'updated' in _supervisor_update.stdout"
+  failed_when: _supervisor_update.rc != 0
+
+# Optional: full daemon reload (rarely needed)
+- name: supervisorctl reload (HUP)
+  ansible.builtin.command: supervisorctl reload
+  when: false
