@@ -1,0 +1,26 @@
+[program:{{ item.name }}]
+command={{ item.command }}
+directory={{ item.directory | default('/') }}
+user={{ item.user | default('root') }}
+autostart={{ (item.autostart | default(true)) | ternary('true','false') }}
+autorestart={{ (item.autorestart | default(true)) | ternary('true','false') }}
+stopsignal={{ item.stopsignal | default('TERM') }}
+startretries={{ item.startretries | default(3) }}
+stopwaitsecs={{ item.stopwaitsecs | default(10) }}
+redirect_stderr={{ (item.redirect_stderr | default(false)) | ternary('true','false') }}
+{% if item.exitcodes is defined %}exitcodes={{ item.exitcodes }}{% endif %}
+{% if item.numprocs is defined %}numprocs={{ item.numprocs }}{% endif %}
+{% if item.process_name is defined %}process_name={{ item.process_name }}{% endif %}
+{% if item.stdout_logfile is defined %}
+stdout_logfile={{ item.stdout_logfile }}
+{% else %}
+stdout_logfile={{ supervisor_log_dir }}/{{ item.name }}.log
+{% endif %}
+{% if item.stderr_logfile is defined %}
+stderr_logfile={{ item.stderr_logfile }}
+{% else %}
+stderr_logfile={{ supervisor_log_dir }}/{{ item.name }}_err.log
+{% endif %}
+{% if item.environment is defined and item.environment %}
+environment={% for k, v in item.environment.items() -%}{{ k }}="{{ v }}"{% if not loop.last %},{% endif %}{%- endfor %}
+{% endif %}
