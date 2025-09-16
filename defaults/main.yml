@@ -1,0 +1,35 @@
+---
+
+# Paths
+supervisor_conf_dir: /etc/supervisor
+supervisor_conf_d_dir: /etc/supervisor/conf.d
+supervisor_log_dir: /var/log/supervisor
+supervisor_run_dir: /var/run
+supervisor_sock_path: /var/run/supervisor.sock
+
+# Logging / process defaults
+supervisor_loglevel: info
+supervisor_minfds: 1024
+supervisor_minprocs: 200
+
+# Programs list (one .conf per item)
+supervisor_programs: []
+# Example with a Node.js app:
+#  - name: my_nodejs_app
+#    command: /usr/bin/node /home/myapp/index.js
+#    directory: /home/myapp
+#    user: dev
+#    autostart: true
+#    autorestart: true
+#    stdout_logfile: /home/myapp/logs/myapp_logs.log
+#    stderr_logfile: /home/myapp/logs/myapp_logs_err.log
+#    stopsignal: TERM
+#    startretries: 3
+#    stopwaitsecs: 10
+#    redirect_stderr: false
+#    exitcodes: "0,2"
+#    numprocs: 1
+#    process_name: "%(program_name)s"
+#    environment:
+#      NODE_ENV: production
+#      PORT: "3000"
