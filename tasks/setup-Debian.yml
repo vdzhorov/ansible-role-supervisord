@@ -1,0 +1,17 @@
+---
+
+- name: Ensure apt cache is up to date
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install Supervisor
+  ansible.builtin.apt:
+    name: "{{ _supervisor_package }}"
+    state: present
+
+- name: Ensure Supervisor service is enabled and running
+  ansible.builtin.service:
+    name: "{{ _supervisor_service }}"
+    state: started
+    enabled: true

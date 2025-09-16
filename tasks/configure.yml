@@ -1,0 +1,39 @@
+---
+
+- name: Ensure Supervisor directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - "{{ supervisor_conf_dir }}"
+    - "{{ supervisor_conf_d_dir }}"
+    - "{{ supervisor_log_dir }}"
+    - "{{ supervisor_run_dir }}"
+
+- name: Deploy main supervisord.conf
+  ansible.builtin.template:
+    src: supervisord.conf.j2
+    dest: "{{ supervisor_conf_dir }}/supervisord.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart supervisor service
+
+- name: Render program configs
+  ansible.builtin.template:
+    src: supervisor-program.conf.j2
+    dest: "{{ supervisor_conf_d_dir }}/{{ item.name }}.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ supervisor_programs }}"
+  loop_control:
+    label: "{{ item.name | default('unnamed') }}"
+  when: supervisor_programs | length > 0
+  notify:
+    - supervisorctl reread
+    - supervisorctl update
