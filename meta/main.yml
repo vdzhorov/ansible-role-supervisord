@@ -1,0 +1,15 @@
+---
+
+galaxy_info:
+  role_name: supervisord
+  author: Valentin Dzhorov
+  description: Install & configure Supervisor with program drop-ins on Ubuntu 24.04
+  license: MIT
+  min_ansible_version: "2.15.1"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+        - noble
+  galaxy_tags: [ supervisord, process, ubuntu, services ]
+dependencies: []
